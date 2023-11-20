@@ -13,6 +13,7 @@
     "sourceMap": true,
     "baseUrl": "./",
     "paths": {
+      "@shared/*": ["src/shared/*"],
       "@/*": ["*"]
     },
     "incremental": true,
