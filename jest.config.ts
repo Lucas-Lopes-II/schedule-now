@@ -26,5 +26,7 @@ export default {
     '.js',
     'jest.config.ts',
     'migration.ts',
+    'data-source.ts',
+    'entity-typeorm.ts',
   ],
 };
