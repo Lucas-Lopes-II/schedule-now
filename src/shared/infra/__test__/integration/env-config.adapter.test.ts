@@ -18,4 +18,34 @@ describe('EnvConfig integration tests', () => {
 
     expect(result).toStrictEqual('test');
   });
+
+  it('should return the enviroment DATABASE_HOST', async () => {
+    const result = sut.getDbHost();
+
+    expect(result).toStrictEqual('localhost');
+  });
+
+  it('should return the enviroment DATABASE_PORT', async () => {
+    const result = sut.getDBPort();
+
+    expect(result).toStrictEqual(5432);
+  });
+
+  it('should return the enviroment DATABASE_USER_NAME', async () => {
+    const result = sut.getDbUserName();
+
+    expect(result).toStrictEqual('postgres');
+  });
+
+  it('should return the enviroment DATABASE_PASSWORD', async () => {
+    const result = sut.getDbPassword();
+
+    expect(result).toStrictEqual('docker');
+  });
+
+  it('should return the enviroment DATABASE_NAME', async () => {
+    const result = sut.getDbName();
+
+    expect(result).toStrictEqual('schedule-test');
+  });
 });
