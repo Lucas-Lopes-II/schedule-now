@@ -18,7 +18,7 @@ describe('StrongPasswordValidation integration tests', () => {
     expect(() => sut.validate(dataValidate)).not.toThrow();
   });
 
-  it('should throw a BadRequestError when the given passwordis weak', async () => {
+  it('should throw a BadRequestError when the given password is weak', async () => {
     dataValidate.password = 'test@123';
     expect(() => sut.validate(dataValidate)).toThrow(
       new BadRequestError(`weak password`),
