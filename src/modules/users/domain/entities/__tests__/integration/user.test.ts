@@ -9,6 +9,7 @@ describe('User', () => {
       id: randomUUID(),
       name: 'test',
       email: 'test@example.com',
+      password: 'test_password',
     };
     const result = sut(data);
 

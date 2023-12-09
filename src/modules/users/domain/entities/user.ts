@@ -4,6 +4,7 @@ export namespace User {
   export interface Interface extends IEntity {
     name: string;
     email: string;
+    password: string;
   }
 
   export const create = (data: Interface): Interface => {
