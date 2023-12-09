@@ -21,6 +21,7 @@ export default {
     '.interface.ts',
     '.module.ts',
     '.mock.ts',
+    '.factory.ts',
     'main.ts',
     'index.ts',
     '.js',
@@ -28,5 +29,7 @@ export default {
     'migration.ts',
     'data-source.ts',
     'entity-typeorm.ts',
+    '.filter.ts',
+    '-error.ts',
   ],
 };
