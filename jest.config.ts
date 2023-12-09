@@ -31,5 +31,6 @@ export default {
     'entity-typeorm.ts',
     '.filter.ts',
     '-error.ts',
+    '.+/infra/main/.*\\.controller\\.ts$',
   ],
 };
