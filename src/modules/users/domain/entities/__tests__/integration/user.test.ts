@@ -23,6 +23,11 @@ describe('User', () => {
   });
 
   describe('id validation', () => {
+    it('should throw a BadRequestError when the given id is not provided', async () => {
+      data.id = null;
+      expect(() => sut(data)).toThrow(new BadRequestError(`id is required`));
+    });
+
     it('should throw a BadRequestError when the given id is invalid', async () => {
       data.id = '59d4c26f-0487-4772-ac03-2171ffee62e';
       expect(() => sut(data)).toThrow(
@@ -52,6 +57,11 @@ describe('User', () => {
   });
 
   describe('name validation', () => {
+    it('should throw a BadRequestError when the given name is not provided', async () => {
+      data.name = null;
+      expect(() => sut(data)).toThrow(new BadRequestError(`name is required`));
+    });
+
     it('should throw a BadRequestError when the given name is too large', async () => {
       data.name = 'test'.repeat(26);
 
@@ -72,6 +82,11 @@ describe('User', () => {
   });
 
   describe('email validation', () => {
+    it('should throw a BadRequestError when the given email is not provided', async () => {
+      data.email = null;
+      expect(() => sut(data)).toThrow(new BadRequestError(`email is required`));
+    });
+
     it('should throw a BadRequestError when the given email is too large', async () => {
       data.email = 'test'.repeat(26);
 
@@ -92,6 +107,13 @@ describe('User', () => {
   });
 
   describe('password validation', () => {
+    it('should throw a BadRequestError when the given password is not provided', async () => {
+      data.password = null;
+      expect(() => sut(data)).toThrow(
+        new BadRequestError(`password is required`),
+      );
+    });
+
     it('should throw a BadRequestError when the given password is weak', async () => {
       data.password = 'test@123';
       expect(() => sut(data)).toThrow(new BadRequestError(`weak password`));
@@ -109,18 +131,6 @@ describe('User', () => {
       expect(() => sut(data)).toThrow(new BadRequestError(`weak password`));
 
       data.password = '*#¨%@!"';
-      expect(() => sut(data)).toThrow(new BadRequestError(`weak password`));
-
-      data.password = undefined;
-      expect(() => sut(data)).toThrow(new BadRequestError(`weak password`));
-
-      data.password = null;
-      expect(() => sut(data)).toThrow(new BadRequestError(`weak password`));
-
-      data.password = '';
-      expect(() => sut(data)).toThrow(new BadRequestError(`weak password`));
-
-      data.password = 0 as any;
       expect(() => sut(data)).toThrow(new BadRequestError(`weak password`));
     });
   });
