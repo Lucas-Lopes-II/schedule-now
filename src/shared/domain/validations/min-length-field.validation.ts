@@ -1,13 +1,23 @@
-import { Validation } from './validation.inteface';
+import {
+  Validation,
+  RequiredFieldValidation,
+} from '@shared/domain/validations';
 import { BadRequestError } from '@shared/domain/errors';
 
 export class MinLengthFieldValidation<T = any> implements Validation<T> {
   constructor(
     private readonly fieldName: keyof T,
     private readonly minLength: number,
+    private readonly isRequired: boolean = true,
   ) {}
 
-  validate(input: T): void {
+  public validate(input: T): void {
+    if (this.isRequired) {
+      this.isRequiredValidate(input);
+    } else if (!input[this.fieldName as string]) {
+      return;
+    }
+
     const value = input[this.fieldName] as string;
 
     if (typeof value !== 'string') {
@@ -21,5 +31,10 @@ export class MinLengthFieldValidation<T = any> implements Validation<T> {
         } characters`.trim(),
       );
     }
+  }
+
+  private isRequiredValidate(input: T): void {
+    const isRequiredValidator = new RequiredFieldValidation<T>(this.fieldName);
+    isRequiredValidator.validate(input);
   }
 }
