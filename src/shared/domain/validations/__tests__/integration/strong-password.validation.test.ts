@@ -18,6 +18,20 @@ describe('StrongPasswordValidation integration tests', () => {
     expect(() => sut.validate(dataValidate)).not.toThrow();
   });
 
+  it('should throw a BadRequestError when the given password is not provided', async () => {
+    dataValidate.password = null;
+    expect(() => sut.validate(dataValidate)).toThrow(
+      new BadRequestError(`password is required`),
+    );
+  });
+
+  it('should not throw a BadRequestError when the given password is not provided and isRequired flag is false', async () => {
+    sut = new StrongPasswordValidation('password', false);
+    dataValidate.password = null;
+
+    expect(() => sut.validate(dataValidate)).not.toThrow();
+  });
+
   it('should throw a BadRequestError when the given password is weak', async () => {
     dataValidate.password = 'test@123';
     expect(() => sut.validate(dataValidate)).toThrow(
@@ -45,26 +59,6 @@ describe('StrongPasswordValidation integration tests', () => {
     );
 
     dataValidate.password = '*#¨%@!"';
-    expect(() => sut.validate(dataValidate)).toThrow(
-      new BadRequestError(`weak password`),
-    );
-
-    dataValidate.password = undefined;
-    expect(() => sut.validate(dataValidate)).toThrow(
-      new BadRequestError(`weak password`),
-    );
-
-    dataValidate.password = null;
-    expect(() => sut.validate(dataValidate)).toThrow(
-      new BadRequestError(`weak password`),
-    );
-
-    dataValidate.password = '';
-    expect(() => sut.validate(dataValidate)).toThrow(
-      new BadRequestError(`weak password`),
-    );
-
-    dataValidate.password = 0 as any;
     expect(() => sut.validate(dataValidate)).toThrow(
       new BadRequestError(`weak password`),
     );
