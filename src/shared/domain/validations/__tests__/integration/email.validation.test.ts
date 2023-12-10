@@ -18,6 +18,20 @@ describe('EmailValidation integration tests', () => {
     expect(() => sut.validate(dataValidate)).not.toThrow();
   });
 
+  it('should throw a BadRequestError when the given email is not provided', async () => {
+    dataValidate.email = null;
+    expect(() => sut.validate(dataValidate)).toThrow(
+      new BadRequestError(`email is required`),
+    );
+  });
+
+  it('should not throw a BadRequestError when the given email is not provided', async () => {
+    sut = new EmailValidation('email', false);
+    dataValidate.email = null;
+
+    expect(() => sut.validate(dataValidate)).not.toThrow();
+  });
+
   it('should throw a BadRequestError when the given email is invalid', async () => {
     dataValidate.email = 'qwewe';
     expect(() => sut.validate(dataValidate)).toThrow(
