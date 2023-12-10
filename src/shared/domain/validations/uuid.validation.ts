@@ -1,11 +1,23 @@
-import { Validator } from './validator';
-import { Validation } from './validation.inteface';
+import {
+  Validation,
+  Validator,
+  RequiredFieldValidation,
+} from '@shared/domain/validations';
 import { BadRequestError } from '@shared/domain/errors';
 
 export class UUIDValidation<T = any> implements Validation<T> {
-  constructor(private readonly fieldName: keyof T) {}
+  constructor(
+    private readonly fieldName: keyof T,
+    private readonly isRequired: boolean = true,
+  ) {}
 
-  validate(input: T): void {
+  public validate(input: T): void {
+    if (this.isRequired) {
+      this.isRequiredValidate(input);
+    } else if (!input[this.fieldName as string]) {
+      return;
+    }
+
     const isValid = Validator.isUUID(input[this.fieldName as string]);
 
     if (!isValid) {
@@ -13,5 +25,10 @@ export class UUIDValidation<T = any> implements Validation<T> {
         `${this.fieldName as string} in invalid format`,
       );
     }
+  }
+
+  private isRequiredValidate(input: T): void {
+    const isRequiredValidator = new RequiredFieldValidation<T>(this.fieldName);
+    isRequiredValidator.validate(input);
   }
 }

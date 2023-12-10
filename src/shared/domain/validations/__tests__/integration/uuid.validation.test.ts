@@ -16,6 +16,20 @@ describe('UUIDValidation integration tests', () => {
     expect(() => sut.validate(dataValidate)).not.toThrow();
   });
 
+  it('should throw a BadRequestError when the given id is not provided', async () => {
+    dataValidate.id = null;
+    expect(() => sut.validate(dataValidate)).toThrow(
+      new BadRequestError(`id is required`),
+    );
+  });
+
+  it('should not throw a BadRequestError when the given id is not provided and isRequired flag is false', async () => {
+    sut = new UUIDValidation('id', false);
+    dataValidate.id = null;
+
+    expect(() => sut.validate(dataValidate)).not.toThrow();
+  });
+
   it('should throw a BadRequestError when the given id is invalid', async () => {
     dataValidate.id = '59d4c26f-0487-4772-ac03-2171ffee62e';
     expect(() => sut.validate(dataValidate)).toThrow(
