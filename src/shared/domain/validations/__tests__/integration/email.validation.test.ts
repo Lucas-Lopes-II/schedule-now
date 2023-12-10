@@ -25,7 +25,7 @@ describe('EmailValidation integration tests', () => {
     );
   });
 
-  it('should not throw a BadRequestError when the given email is not provided', async () => {
+  it('should not throw a BadRequestError when the given email is not provided and isRequired flag is false', async () => {
     sut = new EmailValidation('email', false);
     dataValidate.email = null;
 

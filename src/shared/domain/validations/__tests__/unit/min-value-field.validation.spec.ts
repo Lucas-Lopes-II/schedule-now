@@ -18,6 +18,20 @@ describe('MinValueFieldValidation unit tests', () => {
     expect(() => sut.validate(dataValidate)).not.toThrow();
   });
 
+  it('should throw a BadRequestError when the given age is not provided', async () => {
+    dataValidate.age = null;
+    expect(() => sut.validate(dataValidate)).toThrow(
+      new BadRequestError(`age is required`),
+    );
+  });
+
+  it('should not throw a BadRequestError when the given age is not provided and isRequired flag is false', async () => {
+    sut = new MinValueFieldValidation('age', 18, false);
+    dataValidate.age = null;
+
+    expect(() => sut.validate(dataValidate)).not.toThrow();
+  });
+
   it('should throw a BadRequestError when the given age is not a number', async () => {
     dataValidate.age = 'test' as any;
 

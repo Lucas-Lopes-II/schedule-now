@@ -18,14 +18,14 @@ describe('MaxValueFieldValidation unit tests', () => {
     expect(() => sut.validate(dataValidate)).not.toThrow();
   });
 
-  it('should throw a BadRequestError when the given age is not provided if isRequired flag is false', async () => {
+  it('should throw a BadRequestError when the given age is not provided', async () => {
     dataValidate.age = null;
     expect(() => sut.validate(dataValidate)).toThrow(
       new BadRequestError(`age is required`),
     );
   });
 
-  it('should not throw a BadRequestError when the given age is not provided', async () => {
+  it('should not throw a BadRequestError when the given age is not provided and isRequired flag is false', async () => {
     sut = new MaxValueFieldValidation('age', 120, false);
     dataValidate.age = null;
 
