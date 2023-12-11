@@ -7,7 +7,7 @@ import { faker } from '@faker-js/faker';
 import { UserEntity } from '@users/infra/data/entities';
 import { UserDataBuilder } from '@users/tests/mock';
 
-describe('', () => {
+describe('UserWritingRepo unit tests', () => {
   let mockedUserRepo: Repository<UserEntity>;
   let mockDataSource: DataSource;
   let sut: IUserWritingRepo;
@@ -36,7 +36,7 @@ describe('', () => {
   });
 
   describe('createInstance', () => {
-    it(`should create an instance coreectly`, async () => {
+    it(`should create an instance correctly`, async () => {
       expect(UserWritingRepo.instance).toBeNull();
 
       sut = UserWritingRepo.createInstance(mockDataSource);
