@@ -49,4 +49,25 @@ describe('Validator unit tests', () => {
       expect(sut.isStrongPassword('*#¨%@!"')).toBeFalsy();
     });
   });
+
+  describe('Validator.isISODate', () => {
+    it('should return true when the given iso date is valid', () => {
+      expect(sut.isISODate('2023-12-16T16:39:07.929Z')).toBeTruthy();
+    });
+
+    it('should return false when the given iso date is invalid', () => {
+      expect(sut.isISODate('2023-12-16')).toBeFalsy();
+      expect(sut.isISODate('2023-12-16T16:39')).toBeFalsy();
+      expect(sut.isISODate('2023-12-16T16:39:07')).toBeFalsy();
+      expect(sut.isISODate('202-12-1T16:39:07.929Z')).toBeFalsy();
+      expect(sut.isISODate('202-12-1T16:39:07.929Z')).toBeFalsy();
+      expect(sut.isISODate('2023-12-16T16:39:07.929')).toBeFalsy();
+      expect(sut.isISODate('2023-12-16T16:39:07.92Z')).toBeFalsy();
+      expect(sut.isISODate('2023-12-16T16:39:07.99Z')).toBeFalsy();
+      expect(sut.isISODate('2023-12-16T16:39:07929Z')).toBeFalsy();
+      expect(sut.isISODate('2023-1-16T16:39:07.929Z')).toBeFalsy();
+      expect(sut.isISODate('202-12-16T16:39:07.929Z')).toBeFalsy();
+      expect(sut.isISODate('2023-12-1616:39:07.929Z')).toBeFalsy();
+    });
+  });
 });
