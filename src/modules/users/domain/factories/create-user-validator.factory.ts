@@ -1,3 +1,4 @@
+import { User } from '../entities';
 import {
   MaxLengthFieldValidation,
   MinLengthFieldValidation,
@@ -6,7 +7,6 @@ import {
   ValidationComposite,
   StrongPasswordValidation,
 } from '@shared/domain/validations';
-import { User } from '../entities';
 
 export const createUserValidatorFactory = () => {
   const validations: Validation<User.Interface>[] = [
@@ -16,6 +16,9 @@ export const createUserValidatorFactory = () => {
     new MinLengthFieldValidation('email', 7),
     new MaxLengthFieldValidation('email', 100),
     new StrongPasswordValidation('password'),
+    new UUIDValidation('createdBy', false),
+    new UUIDValidation('deletedBy', false),
+    new UUIDValidation('updatedBy', false),
   ];
 
   return new ValidationComposite(validations);
