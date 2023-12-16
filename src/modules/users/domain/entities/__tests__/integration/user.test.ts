@@ -1,15 +1,14 @@
-import { randomUUID } from 'crypto';
 import { User } from '@users/domain/entities';
 import { BadRequestError } from '@shared/domain/errors';
 
-describe('User', () => {
+describe('User create', () => {
   let sut: (data: User.Interface) => User.Interface;
   let data: User.Interface;
 
   beforeEach(() => {
     sut = User.create;
     data = {
-      id: randomUUID(),
+      id: 'c0a55fe5-4f71-4088-b6ce-dd494f1a75f1',
       name: 'test',
       email: 'test@example.com',
       password: 'Test@123',
@@ -132,6 +131,111 @@ describe('User', () => {
 
       data.password = '*#¨%@!"';
       expect(() => sut(data)).toThrow(new BadRequestError(`weak password`));
+    });
+  });
+
+  describe('createdBy validation', () => {
+    it('should not throw an error when the given createdBy is provided correctly', async () => {
+      data.createdBy = 'c0a55fe5-4f71-4088-b6ce-dd494f1a75f0';
+
+      expect(() => sut(data)).not.toThrow();
+    });
+
+    it('should throw a BadRequestError when the given createdBy is invalid', async () => {
+      data.createdBy = '59d4c26f-0487-4772-ac03-2171ffee62e';
+      expect(() => sut(data)).toThrow(
+        new BadRequestError(`createdBy in invalid format`),
+      );
+
+      data.createdBy = '9d4c26f-0487-4772-ac03-2171ffee62e1';
+      expect(() => sut(data)).toThrow(
+        new BadRequestError(`createdBy in invalid format`),
+      );
+
+      data.createdBy = '59d4c26f-0487-4772-ac0-2171ffee62e1';
+      expect(() => sut(data)).toThrow(
+        new BadRequestError(`createdBy in invalid format`),
+      );
+
+      data.createdBy = '59d4c26f-0487-477-ac03-2171ffee62e1';
+      expect(() => sut(data)).toThrow(
+        new BadRequestError(`createdBy in invalid format`),
+      );
+
+      data.createdBy = '59d4c26f-048-4772-ac03-2171ffee62e1';
+      expect(() => sut(data)).toThrow(
+        new BadRequestError(`createdBy in invalid format`),
+      );
+    });
+  });
+
+  describe('deletedBy validation', () => {
+    it('should not throw an error when the given deletedBy is provided correctly', async () => {
+      data.deletedBy = 'c0a55fe5-4f71-4088-b6ce-dd494f1a75f0';
+
+      expect(() => sut(data)).not.toThrow();
+    });
+
+    it('should throw a BadRequestError when the given deletedBy is invalid', async () => {
+      data.deletedBy = '59d4c26f-0487-4772-ac03-2171ffee62e';
+      expect(() => sut(data)).toThrow(
+        new BadRequestError(`deletedBy in invalid format`),
+      );
+
+      data.deletedBy = '9d4c26f-0487-4772-ac03-2171ffee62e1';
+      expect(() => sut(data)).toThrow(
+        new BadRequestError(`deletedBy in invalid format`),
+      );
+
+      data.deletedBy = '59d4c26f-0487-4772-ac0-2171ffee62e1';
+      expect(() => sut(data)).toThrow(
+        new BadRequestError(`deletedBy in invalid format`),
+      );
+
+      data.deletedBy = '59d4c26f-0487-477-ac03-2171ffee62e1';
+      expect(() => sut(data)).toThrow(
+        new BadRequestError(`deletedBy in invalid format`),
+      );
+
+      data.deletedBy = '59d4c26f-048-4772-ac03-2171ffee62e1';
+      expect(() => sut(data)).toThrow(
+        new BadRequestError(`deletedBy in invalid format`),
+      );
+    });
+  });
+
+  describe('updatedBy validation', () => {
+    it('should not throw an error when the given updatedBy is provided correctly', async () => {
+      data.updatedBy = 'c0a55fe5-4f71-4088-b6ce-dd494f1a75f0';
+
+      expect(() => sut(data)).not.toThrow();
+    });
+
+    it('should throw a BadRequestError when the given updatedBy is invalid', async () => {
+      data.updatedBy = '59d4c26f-0487-4772-ac03-2171ffee62e';
+      expect(() => sut(data)).toThrow(
+        new BadRequestError(`updatedBy in invalid format`),
+      );
+
+      data.updatedBy = '9d4c26f-0487-4772-ac03-2171ffee62e1';
+      expect(() => sut(data)).toThrow(
+        new BadRequestError(`updatedBy in invalid format`),
+      );
+
+      data.updatedBy = '59d4c26f-0487-4772-ac0-2171ffee62e1';
+      expect(() => sut(data)).toThrow(
+        new BadRequestError(`updatedBy in invalid format`),
+      );
+
+      data.updatedBy = '59d4c26f-0487-477-ac03-2171ffee62e1';
+      expect(() => sut(data)).toThrow(
+        new BadRequestError(`updatedBy in invalid format`),
+      );
+
+      data.updatedBy = '59d4c26f-048-4772-ac03-2171ffee62e1';
+      expect(() => sut(data)).toThrow(
+        new BadRequestError(`updatedBy in invalid format`),
+      );
     });
   });
 });
