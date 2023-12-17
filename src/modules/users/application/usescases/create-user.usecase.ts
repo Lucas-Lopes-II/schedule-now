@@ -4,6 +4,7 @@ import {
 } from '@users/infra/data/repositories';
 import { randomUUID } from 'node:crypto';
 import { User } from '@users/domain/entities';
+import { IHasher } from '@shared/infra/crypto';
 import { BadRequestError } from '@shared/domain/errors';
 import { DefaultUseCase } from '@shared/application/usecases';
 
@@ -25,6 +26,7 @@ export namespace CreateUserUseCase {
     constructor(
       private readonly userWritingRepo: IUserWritingRepo,
       private readonly userReadingRepo: IUserReadingRepo,
+      private readonly hasher: IHasher,
     ) {}
 
     async execute({
@@ -46,7 +48,11 @@ export namespace CreateUserUseCase {
         password,
         actionDoneBy,
       } as User.Interface);
-      const savedUser = await this.userWritingRepo.create(createdUser);
+      const hashedPassword = await this.hasher.hash(password);
+      const savedUser = await this.userWritingRepo.create({
+        ...createdUser,
+        password: hashedPassword,
+      });
 
       return {
         id: savedUser.id,
