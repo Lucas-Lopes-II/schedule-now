@@ -1,7 +1,7 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { EnvConfig, IEnvConfig } from '@shared/infra/env';
+import { IEnvConfig, envConfigFactory } from '@shared/infra/env';
 
-const envConfig: IEnvConfig = new EnvConfig();
+const envConfig: IEnvConfig = envConfigFactory();
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
   host: envConfig.getDbHost(),

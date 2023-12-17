@@ -1,10 +1,10 @@
-import { EnvConfig, IEnvConfig } from '@shared/infra/env';
+import { IEnvConfig, envConfigFactory } from '@shared/infra/env';
 
 describe('EnvConfig integration tests', () => {
   let sut: IEnvConfig;
 
   beforeEach(() => {
-    sut = new EnvConfig();
+    sut = envConfigFactory();
   });
 
   it('should return the enviroment PORT', async () => {

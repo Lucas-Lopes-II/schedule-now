@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
-import { EnvConfig } from '@shared/infra/env';
 import { dataSource } from '@shared/infra/database';
+import { envConfigFactory } from '@shared/infra/env';
 import { globalExeptionFiltersFactory } from '@shared/infra/exception-filters';
 
-const envConfig = new EnvConfig();
+const envConfig = envConfigFactory();
 
 async function bootstrap() {
   await dataSource
