@@ -56,7 +56,7 @@ describe('UserReadingRepo unit tests', () => {
       });
     });
 
-    it(`should retrun fakse if dont find one user with the given email`, async () => {
+    it(`should retrun false if don't find one user with the given email`, async () => {
       sut = UserReadingRepo.createInstance(mockDataSource);
       jest.spyOn(mockedUserRepo, 'findOne').mockResolvedValueOnce(null);
       const result = await sut.emailExists(email);
