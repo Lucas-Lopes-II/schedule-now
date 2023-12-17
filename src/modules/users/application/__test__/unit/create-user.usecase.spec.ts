@@ -1,7 +1,11 @@
 import { randomUUID } from 'node:crypto';
 import { UserDataBuilder } from '@users/tests/mock';
 import { CreateUserUseCase } from '@users/application/usescases';
-import { IUserWritingRepo } from '@users/infra/data/repositories';
+import {
+  IUserReadingRepo,
+  IUserWritingRepo,
+} from '@users/infra/data/repositories';
+import { BadRequestError } from '@shared/domain/errors';
 
 describe('CreateUserUseCase unit tests', () => {
   const mockedInput = {
@@ -19,17 +23,34 @@ describe('CreateUserUseCase unit tests', () => {
 
   let sut: CreateUserUseCase.UseCase;
   let mockedUserWritingRepo: IUserWritingRepo;
+  let mockedUserReadingRepo: IUserReadingRepo;
 
   beforeEach(() => {
     mockedUserWritingRepo = {
       create: jest.fn().mockResolvedValue(mockedUser),
     } as any as IUserWritingRepo;
-    sut = new CreateUserUseCase.UseCase(mockedUserWritingRepo);
+    mockedUserReadingRepo = {
+      emailExists: jest.fn().mockResolvedValue(false),
+    } as any as IUserReadingRepo;
+    sut = new CreateUserUseCase.UseCase(
+      mockedUserWritingRepo,
+      mockedUserReadingRepo,
+    );
   });
 
   it('should create an user', async () => {
     const result = await sut.execute(mockedInput);
 
     expect(result).toStrictEqual(mockedOutput);
+  });
+
+  it('should thow a BadRequestError if userReadingRepo.emailExists return true', async () => {
+    jest
+      .spyOn(mockedUserReadingRepo, 'emailExists')
+      .mockResolvedValueOnce(true);
+
+    expect(sut.execute(mockedInput)).rejects.toThrow(
+      new BadRequestError('email already exists'),
+    );
   });
 });
