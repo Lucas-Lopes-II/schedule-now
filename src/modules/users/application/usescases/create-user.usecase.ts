@@ -1,7 +1,11 @@
+import {
+  IUserReadingRepo,
+  IUserWritingRepo,
+} from '@users/infra/data/repositories';
 import { randomUUID } from 'node:crypto';
 import { User } from '@users/domain/entities';
+import { BadRequestError } from '@shared/domain/errors';
 import { DefaultUseCase } from '@shared/application/usecases';
-import { IUserWritingRepo } from '@users/infra/data/repositories';
 
 export namespace CreateUserUseCase {
   export type Input = {
@@ -18,7 +22,10 @@ export namespace CreateUserUseCase {
   };
 
   export class UseCase implements DefaultUseCase<Input, Output> {
-    constructor(private readonly userWritingRepo: IUserWritingRepo) {}
+    constructor(
+      private readonly userWritingRepo: IUserWritingRepo,
+      private readonly userReadingRepo: IUserReadingRepo,
+    ) {}
 
     async execute({
       name,
@@ -26,6 +33,11 @@ export namespace CreateUserUseCase {
       password,
       actionDoneBy,
     }: Input): Promise<Output> {
+      const emailInUse = await this.userReadingRepo.emailExists(email);
+      if (emailInUse) {
+        throw new BadRequestError('email already exists');
+      }
+
       const id = randomUUID();
       const createdUser = User.create({
         id,
