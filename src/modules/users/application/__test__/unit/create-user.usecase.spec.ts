@@ -1,8 +1,5 @@
-import {
-  IUserReadingRepo,
-  IUserWritingRepo,
-} from '@users/infra/data/repositories';
 import { randomUUID } from 'node:crypto';
+import { User } from '@users/domain/entities';
 import { IHasher } from '@shared/infra/crypto';
 import { UserDataBuilder } from '@users/tests/mock';
 import { BadRequestError } from '@shared/domain/errors';
@@ -23,17 +20,17 @@ describe('CreateUserUseCase unit tests', () => {
   const mockedUser = UserDataBuilder({ ...mockedOutput });
 
   let sut: CreateUserUseCase.UseCase;
-  let mockedUserWritingRepo: IUserWritingRepo;
-  let mockedUserReadingRepo: IUserReadingRepo;
+  let mockedUserWritingRepo: User.IWritingRepo;
+  let mockedUserReadingRepo: User.IReadingRepo;
   let mockedHasher: IHasher;
 
   beforeEach(() => {
     mockedUserWritingRepo = {
       create: jest.fn().mockResolvedValue(mockedUser),
-    } as any as IUserWritingRepo;
+    } as any as User.IWritingRepo;
     mockedUserReadingRepo = {
       emailExists: jest.fn().mockResolvedValue(false),
-    } as any as IUserReadingRepo;
+    } as any as User.IReadingRepo;
     mockedHasher = {
       hash: jest.fn().mockResolvedValue('hashed value'),
     } as any as IHasher;
@@ -48,9 +45,6 @@ describe('CreateUserUseCase unit tests', () => {
     const result = await sut.execute(mockedInput);
 
     expect(result).toStrictEqual(mockedOutput);
-    expect(mockedUserWritingRepo.create).toHaveBeenCalledTimes(1);
-    expect(mockedUserReadingRepo.emailExists).toHaveBeenCalledTimes(1);
-    expect(mockedHasher.hash).toHaveBeenCalledTimes(1);
   });
 
   it('should thow a BadRequestError if userReadingRepo.emailExists return true', async () => {

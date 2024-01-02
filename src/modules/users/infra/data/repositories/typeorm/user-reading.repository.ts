@@ -1,8 +1,8 @@
+import { User } from '@users/domain/entities';
 import { DataSource, Repository } from 'typeorm';
 import { UserEntity } from '@users/infra/data/entities';
-import { IUserReadingRepo } from '@users/infra/data/repositories';
 
-export class UserReadingRepo implements IUserReadingRepo {
+export class UserReadingRepo implements User.IReadingRepo {
   public static instance: UserReadingRepo | null = null;
   public userRepo: Repository<UserEntity>;
 

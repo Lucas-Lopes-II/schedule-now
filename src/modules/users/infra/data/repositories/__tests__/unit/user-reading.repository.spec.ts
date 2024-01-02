@@ -1,15 +1,13 @@
-import {
-  IUserReadingRepo,
-  UserReadingRepo,
-} from '@users/infra/data/repositories';
+import { User } from '@users/domain/entities';
 import { DataSource, Repository } from 'typeorm';
 import { UserDataBuilder } from '@users/tests/mock';
 import { UserEntity } from '@users/infra/data/entities';
+import { UserReadingRepo } from '@users/infra/data/repositories';
 
 describe('UserReadingRepo unit tests', () => {
   let mockedUserRepo: Repository<UserEntity>;
   let mockDataSource: DataSource;
-  let sut: IUserReadingRepo;
+  let sut: User.IReadingRepo;
 
   const mockedUser = UserDataBuilder({});
 

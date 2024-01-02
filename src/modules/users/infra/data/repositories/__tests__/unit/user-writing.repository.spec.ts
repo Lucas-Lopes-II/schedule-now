@@ -1,16 +1,14 @@
-import { DataSource, Repository } from 'typeorm';
-import {
-  IUserWritingRepo,
-  UserWritingRepo,
-} from '@users/infra/data/repositories';
 import { faker } from '@faker-js/faker';
-import { UserEntity } from '@users/infra/data/entities';
+import { User } from '@users/domain/entities';
+import { DataSource, Repository } from 'typeorm';
 import { UserDataBuilder } from '@users/tests/mock';
+import { UserEntity } from '@users/infra/data/entities';
+import { UserWritingRepo } from '@users/infra/data/repositories';
 
 describe('UserWritingRepo unit tests', () => {
   let mockedUserRepo: Repository<UserEntity>;
   let mockDataSource: DataSource;
-  let sut: IUserWritingRepo;
+  let sut: User.IWritingRepo;
 
   const mockedUser = UserDataBuilder({});
 

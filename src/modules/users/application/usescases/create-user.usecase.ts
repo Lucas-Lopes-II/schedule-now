@@ -1,11 +1,6 @@
-import {
-  IUserReadingRepo,
-  IUserWritingRepo,
-} from '@users/infra/data/repositories';
 import { randomUUID } from 'node:crypto';
 import { User } from '@users/domain/entities';
 import { IHasher } from '@shared/infra/crypto';
-import { BadRequestError } from '@shared/domain/errors';
 import { DefaultUseCase } from '@shared/application/usecases';
 
 export namespace CreateUserUseCase {
@@ -24,8 +19,8 @@ export namespace CreateUserUseCase {
 
   export class UseCase implements DefaultUseCase<Input, Output> {
     constructor(
-      private readonly userWritingRepo: IUserWritingRepo,
-      private readonly userReadingRepo: IUserReadingRepo,
+      private readonly userWritingRepo: User.IWritingRepo,
+      private readonly userReadingRepo: User.IReadingRepo,
       private readonly hasher: IHasher,
     ) {}
 
@@ -35,29 +30,24 @@ export namespace CreateUserUseCase {
       password,
       actionDoneBy,
     }: Input): Promise<Output> {
-      const emailInUse = await this.userReadingRepo.emailExists(email);
-      if (emailInUse) {
-        throw new BadRequestError('email already exists');
-      }
-
       const id = randomUUID();
-      const createdUser = User.create({
-        id,
-        name,
-        email,
-        password,
-        actionDoneBy,
-      } as User.Interface);
-      const hashedPassword = await this.hasher.hash(password);
-      const savedUser = await this.userWritingRepo.create({
-        ...createdUser,
-        password: hashedPassword,
-      });
+      const createdUser = await User.create(
+        {
+          id,
+          name,
+          email,
+          password,
+          actionDoneBy,
+        } as User.Interface,
+        this.userWritingRepo,
+        this.userReadingRepo,
+        this.hasher,
+      );
 
       return {
-        id: savedUser.id,
-        name: savedUser.name,
-        email: savedUser.email,
+        id: createdUser.id,
+        name: createdUser.name,
+        email: createdUser.email,
       };
     }
   }
